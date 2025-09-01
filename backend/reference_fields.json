@@ -1,0 +1,22 @@
+{
+  "IfcWindow": {
+    "required": ["OverallWidth", "OverallHeight", "FrameMaterial"],
+    "optional": ["Location", "OpeningType"]
+  },
+  "IfcDoor": {
+    "required": ["OverallWidth", "OverallHeight"],
+    "optional": ["FireRating", "OperationType"]
+  },
+  "IfcWall": {
+    "required": ["Length", "Height"],
+    "optional": ["Material"]
+  },
+  "IfcSlab": {
+    "required": ["Thickness"],
+    "optional": ["Material"]
+  },
+  "IfcRoof": {
+    "required": ["OverallHeight"],
+    "optional": ["Material"]
+  }
+} 

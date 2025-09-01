@@ -1,0 +1,17 @@
+# This is a sample input file for IFC command generation
+# Each line follows one of these formats:
+# ElementType:ID:Name:Property1=Value1:Property2=Value2
+# ElementType:ID:Position(x,y,z)
+# Delete:ElementType:ID
+
+# Define a wall with properties
+IfcWall:123:Exterior_Wall:Material=Concrete:Height=3000
+
+# Define a window with position
+IfcWindow:456:Main_Window:Position(1000,2000,1500)
+
+# Define a door with properties and position
+IfcDoor:789:Main_Entrance:Material=Wood:Position(2000,0,0)
+
+# Delete an element
+Delete:IfcWall:999 
