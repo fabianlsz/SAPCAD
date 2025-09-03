@@ -1,193 +1,102 @@
-# SAPCAD Backend + Frontend Setup (Ollama Llama 3.2 Integration)
+---
 
-This project connects a React frontend and a FastAPI backend with a locally running Llama 3.2 model via Ollama.
+# SAPCAD – Backend & Frontend Setup (with Ollama + Llama 3.2)
+
+This guide explains how to set up **SAPCAD** locally with a **FastAPI backend**, a **React frontend**, and **Ollama** for LLM integration.
 
 ---
 
-## 📦 Prerequisites
+## Prerequisites
 
-Make sure you have the following installed:
+Make sure the following are installed on your system:
 
-- **Python 3.9+** (preferably managed with [Anaconda](https://www.anaconda.com/products/distribution))
-- **Node.js 18+**
-- **Ollama** (for local LLM inference) → [https://ollama.com/download](https://ollama.com/download)
+* [Python 3.9+](https://www.anaconda.com/products/distribution) (recommended via Anaconda)
+* [Node.js 18+](https://nodejs.org/en)
+* [Ollama](https://ollama.com/download) (for local LLM inference)
 
----
-
-## ⚙️ Backend Setup (FastAPI + Ollama)
-
-### 1. Activate the Conda Environment
-
-```bash
-conda activate sapcad
-```
-
-> If the environment does not exist, please create it first or ask the team.
-
-### 2. Install Python Dependencies
-
-Inside the backend project directory:
-
-```bash
-pip install fastapi uvicorn httpx
-```
-
-> *(Only needed once unless dependencies are updated.)*
-
-### 3. Start Ollama and Llama 3.2 Model
-
-Check installed models:
-
-```bash
-ollama list
-```
-
-If Llama 3.2 is available, run:
-
-```bash
-ollama run llama3.2
-```
-
-Keep this terminal session running while developing.
-
-### 4. Start the Backend Server
-
-In the backend project folder where `main.py` exists:
-
-```bash
-uvicorn main:app --reload
-```
-
-The backend will be available at:
-
-```
-http://localhost:8000
-```
+  * Quick intro: [YouTube – Ollama Setup](https://www.youtube.com/watch?v=92_yb31Bqzk&ab_channel=AleksandarHaberPhD)
 
 ---
 
-## 🎨 Frontend Setup (React)
+## Backend Setup (FastAPI + Ollama)
 
-### 1. Install Frontend Dependencies
+1. **Activate your Conda environment**
 
-Navigate to the frontend project directory:
-
-```bash
-npm install
-```
-
-### 2. Run Frontend Development Server
-
-```bash
-npm run dev
-```
-
-The frontend will be available at:
-
-```
-http://localhost:5173
-```
-
----
-
-## 🔗 How the System Works
-
-1. User submits a prompt via the frontend.
-2. The frontend sends a `POST` request to:
+   ```bash
+   conda activate sapcad
    ```
-   http://localhost:8000/llm
+
+2. **Install backend dependencies**
+
+   From the backend project folder:
+
+   ```bash
+   pip install fastapi uvicorn httpx
    ```
-3. The backend forwards the prompt to the Llama 3.2 model via Ollama.
-4. The model generates a response, which the backend returns to the frontend for display.
+
+3. **Start Ollama with the Llama 3.2 model**
+
+   * Check installed models:
+
+     ```bash
+     ollama list
+     ```
+
+   * If `llama3.2` is available, run:
+
+     ```bash
+     ollama run llama3.2
+     ```
+
+   Keep this terminal open while working — Ollama must stay running.
+
+4. **Run the FastAPI backend**
+
+   From the folder containing `main.py`:
+
+   ```bash
+   uvicorn main:app --reload
+   ```
+
+   The backend will be available at: [http://localhost:8000](http://localhost:8000)
 
 ---
 
-## 🛠 Troubleshooting
+## Frontend Setup (React)
 
-| Issue | Solution |
-|:-----|:---------|
-| `'ollama' is not recognized` | Ensure Ollama is installed and added to system PATH. |
-| CORS errors | Confirm CORS settings in the backend allow `http://localhost:5173`. |
-| Model not found | Check `ollama list` and use the correct model name (`llama3.2`). |
-| Backend fetch fails | Ensure Ollama is running and accessible at `http://localhost:11434`. |
+1. **Install dependencies**
 
----
+   From the frontend project folder:
 
-## ✅ Summary Commands
+   ```bash
+   npm install
+   ```
 
-```bash
-# Backend
-conda activate sapcad
-pip install fastapi uvicorn httpx  # if not already installed
-ollama run llama3.2
-uvicorn main:app --reload
+2. **Start the development server**
 
-# Frontend
-npm install
-npm run dev
-```
+   ```bash
+   npm run dev
+   ```
+
+   The frontend will be available at: [http://localhost:5173](http://localhost:5173)
 
 ---
 
-## ✍️ Notes
+## Troubleshooting
 
-- Always ensure Ollama is running before starting the backend.
-- If frontend or backend ports change, update CORS settings and API URLs accordingly.
-- This setup is intended for **local development**. Production deployment will require further adjustments (reverse proxy, HTTPS, security hardening, etc.).
+| Issue                        | Solution                                                             |
+| ---------------------------- | -------------------------------------------------------------------- |
+| `'ollama' is not recognized` | Make sure Ollama is installed and added to your system PATH.         |
+| CORS errors                  | Update FastAPI CORS settings to allow `http://localhost:5173`.       |
+| Model not found              | Run `ollama list` and confirm the model name is `llama3.2`.          |
+| Backend fetch fails          | Ensure Ollama is running and accessible at `http://localhost:11434`. |
 
 ---
-
-# 🚀 Happy Developing!
-
-# LLaMA 3.2 LoRA Fine-tuning Script
-
-## Requirements
-- Python 3.8+
-- GPU with at least 16GB VRAM (recommended for large models)
-- Internet connection for downloading models from HuggingFace (unless using local models)
-
-### Python Dependencies
-Install all required packages with:
-```bash
-pip install -r requirements.txt
-```
-
-## Dataset Format
-- Training and validation datasets must be CSV files with a column named `text`.
-
-## Usage
-### Training
-```bash
-python llama_3_2_pretrain.py --mode train --dataset_path ./datasets/my_dataset/data.csv --output_dir ./models/llama3_lora
-```
-
-### Training with Validation and Resume
-```bash
-python llama_3_2_pretrain.py --mode train --dataset_path train.csv --val_dataset_path val.csv --resume_from_checkpoint ./models/llama3_lora/checkpoint-1000
-```
-
-### Inference
-```bash
-python llama_3_2_pretrain.py --mode infer --output_dir ./models/llama3_lora
-```
 
 ## Notes
-- If you get out-of-memory errors, reduce the batch size or use a smaller model.
-- For first-time model use, ensure you have an internet connection to download weights from HuggingFace.
-- CUDA and GPU drivers must be installed for GPU acceleration.
 
-## Distributed/Multi-GPU Training
+* Start **Ollama** before running the backend.
+* If frontend or backend ports are changed, update **CORS settings** and API URLs.
+* This setup is intended for **local development**. For production, further steps are needed (reverse proxy, HTTPS, security hardening, etc.).
 
-The script supports distributed and multi-GPU training out of the box via HuggingFace Trainer.
-
-To train on multiple GPUs using PyTorch:
-```bash
-torchrun --nproc_per_node=4 llama_3_2_pretrain.py --mode train --dataset_path ./datasets/my_dataset/data.csv --output_dir ./models/llama3_lora
-```
-
-Or using HuggingFace Accelerate:
-```bash
-accelerate launch llama_3_2_pretrain.py --mode train --dataset_path ./datasets/my_dataset/data.csv --output_dir ./models/llama3_lora
-```
-
-Adjust `--nproc_per_node` to the number of GPUs available on your machine.
+---
